@@ -6,24 +6,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { invalidCredentialsError } from "./errors";
 
-async function checkUserExists(login: string): Promise<SignInResult> {
-  const gitHubEmail = login+"@github.com";
-  const userExists = await userRepository.findByEmail(gitHubEmail);
-  
-  if (!userExists) {
-    const password = (Math.random() + 1).toString(36).substring(20);
-    await userRepository.create({ email: gitHubEmail, password });
-  }
-
-  const user = await userRepository.findByEmail(gitHubEmail);
-  const token = await createSession(user.id);
-
-  return {
-    user: exclude(user, "password"),
-    token,
-  };
-}
-
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
 
@@ -40,7 +22,7 @@ async function signIn(params: SignInParams): Promise<SignInResult> {
 }
 
 async function getUserOrFail(email: string): Promise<GetUserOrFailResult> {
-  const user = await userRepository.findByEmail(email, { id: true, email: true, password: true });
+  const user = await userRepository.findByEmail(email, { id: true, email: true, password: true, name: true, photo: true });
   if (!user) throw invalidCredentialsError();
 
   return user;
@@ -64,15 +46,14 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
 export type SignInParams = Pick<users, "email" | "password">;
 
 type SignInResult = {
-  user: Pick<users, "id" | "email">;
+  user: Pick<users, "id" | "email" | "name" | "photo">;
   token: string;
 };
 
-type GetUserOrFailResult = Pick<users, "id" | "email" | "password">;
+type GetUserOrFailResult = Pick<users, "id" | "email" | "password" | "name" | "photo">;
 
 const authenticationService = {
   signIn,
-  checkUserExists,
 };
 
 export default authenticationService;

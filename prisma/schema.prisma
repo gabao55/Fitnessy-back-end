@@ -14,7 +14,7 @@ model users {
   id        Int        @id @default(autoincrement())
   email     String     @unique @db.VarChar(255)
   password  String     @db.VarChar(255)
-  name      String     @db.VarChar(255) @default(uuid())
+  name      String     @db.VarChar(255)
   photo     String?    @default("https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png")
   createdAt DateTime   @default(now())
   session   session[]
