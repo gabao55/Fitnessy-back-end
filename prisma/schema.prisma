@@ -1,0 +1,69 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id        Int        @id @default(autoincrement())
+  email     String     @unique @db.VarChar(255)
+  password  String     @db.VarChar(255)
+  name      String     @db.VarChar(255)
+  photo     String
+  createdAt DateTime   @default(now())
+  session   session[]
+  exercise  exercise[]
+  metering  metering[]
+}
+
+model session {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  user      user     @relation(fields: [user_id], references: [id])
+  token     String
+  createdAt DateTime @default(now())
+}
+
+model metering {
+  id        Int      @id @default(autoincrement())
+  user_id   Int
+  user      user     @relation(fields: [user_id], references: [id])
+  date      DateTime @default(now())
+  weight    Float
+  createdAt DateTime @default(now())
+}
+
+model exercise {
+  id                     Int                      @id @default(autoincrement())
+  user_id                Int
+  user                   user                     @relation(fields: [user_id], references: [id])
+  name                   String                   @db.VarChar(255)
+  date                   DateTime                 @default(now())
+  duration_min           Int
+  createdAt              DateTime                 @default(now())
+  exercise_muscle_groups exercise_muscle_groups[]
+}
+
+model muscle_groups {
+  id                     Int                      @id @default(autoincrement())
+  name                   String                   @db.VarChar(255)
+  createdAt              DateTime                 @default(now())
+  exercise_muscle_groups exercise_muscle_groups[]
+}
+
+model exercise_muscle_groups {
+  exercise_id      Int
+  exercise         exercise      @relation(fields: [exercise_id], references: [id])
+  muscle_groups_id Int
+  muscle_groups    muscle_groups @relation(fields: [muscle_groups_id], references: [id])
+  assignedAt       DateTime      @default(now())
+  assignedBy       String
+
+  @@id([exercise_id, muscle_groups_id])
+}
