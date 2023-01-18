@@ -1,7 +1,7 @@
 import sessionRepository from "@/repositories/session-repository";
 import userRepository from "@/repositories/user-repository";
 import { exclude } from "@/utils/prisma-utils";
-import { User } from "@prisma/client";
+import { users } from "@prisma/client";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { invalidCredentialsError } from "./errors";
@@ -50,7 +50,7 @@ async function createSession(userId: number) {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET);
   await sessionRepository.create({
     token,
-    userId,
+    user_id: userId,
   });
 
   return token;
@@ -61,14 +61,14 @@ async function validatePasswordOrFail(password: string, userPassword: string) {
   if (!isPasswordValid) throw invalidCredentialsError();
 }
 
-export type SignInParams = Pick<User, "email" | "password">;
+export type SignInParams = Pick<users, "email" | "password">;
 
 type SignInResult = {
-  user: Pick<User, "id" | "email">;
+  user: Pick<users, "id" | "email">;
   token: string;
 };
 
-type GetUserOrFailResult = Pick<User, "id" | "email" | "password">;
+type GetUserOrFailResult = Pick<users, "id" | "email" | "password">;
 
 const authenticationService = {
   signIn,

@@ -1,7 +1,7 @@
 import { prisma } from "@/config";
 import { Prisma } from "@prisma/client";
 
-async function create(data: Prisma.SessionUncheckedCreateInput) {
+async function create(data: Prisma.sessionUncheckedCreateInput) {
   return prisma.session.create({
     data,
   });
