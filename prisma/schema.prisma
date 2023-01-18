@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model user {
+model users {
   id        Int        @id @default(autoincrement())
   email     String     @unique @db.VarChar(255)
   password  String     @db.VarChar(255)
@@ -25,7 +25,7 @@ model user {
 model session {
   id        Int      @id @default(autoincrement())
   user_id   Int
-  user      user     @relation(fields: [user_id], references: [id])
+  user      users     @relation(fields: [user_id], references: [id])
   token     String
   createdAt DateTime @default(now())
 }
@@ -33,7 +33,7 @@ model session {
 model metering {
   id        Int      @id @default(autoincrement())
   user_id   Int
-  user      user     @relation(fields: [user_id], references: [id])
+  user      users     @relation(fields: [user_id], references: [id])
   date      DateTime @default(now())
   weight    Float
   createdAt DateTime @default(now())
@@ -42,7 +42,7 @@ model metering {
 model exercise {
   id                     Int                      @id @default(autoincrement())
   user_id                Int
-  user                   user                     @relation(fields: [user_id], references: [id])
+  user                   users                     @relation(fields: [user_id], references: [id])
   name                   String                   @db.VarChar(255)
   date                   DateTime                 @default(now())
   duration_min           Int
