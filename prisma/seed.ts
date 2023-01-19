@@ -4,7 +4,8 @@ const prisma = new PrismaClient();
 async function main() {
   let muscle_group = await prisma.muscle_groups.findFirst();
   if (!muscle_group) {
-    await seedMuscleGroups();
+    const muscleGroups = await seedMuscleGroups();
+    console.log(muscleGroups);
   }
 }
 

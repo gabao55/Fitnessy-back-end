@@ -4,11 +4,11 @@ import exercisesRepository from "@/repositories/exercises-repository";
 
 export async function registerExercise(newExercise: NewExercise) {
   const createdExercise = await exercisesRepository.createExercise(newExercise.exercise, newExercise.user_id);
-  
-  Object.values(newExercise.muscleGroups).forEach(muscleGroup => {
-    associateMuscleGroupToExercise(createdExercise.id, muscleGroup);
-  });
 
+  for (const muscleGroup of newExercise.muscleGroups) {
+    await exercisesRepository.associateMuscleGroupToExercise(createdExercise.id, muscleGroup);
+  }
+  
   const result = {
     exercise: createdExercise,
     muscleGroups: newExercise.muscleGroups
@@ -17,9 +17,6 @@ export async function registerExercise(newExercise: NewExercise) {
   return result
 }
 
-async function associateMuscleGroupToExercise(exercise_id: number, muscleGroup: string) {
-  await exercisesRepository.associateMuscleGroupToExercise(exercise_id, muscleGroup);
-}
 
 export type ExercisesData = Pick<exercise, "name" | "duration_min" | "date">;
 

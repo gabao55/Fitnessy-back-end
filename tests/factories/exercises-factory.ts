@@ -34,3 +34,14 @@ export async function createExercise(user_id: number) {
     muscleGroups: muscles
   }
 };
+
+export function createValidBodyForCreatingExercise() {
+  return {
+    exercise: {
+      name: "Exercise",
+      duration_min: Math.floor(Math.random() * 100),
+      date: new Date(faker.date.past()),
+    },
+    muscleGroups: [ MUSCLEGROUPSNAMES.Abdomen, MUSCLEGROUPSNAMES.Cardiovascular ],
+  }
+}

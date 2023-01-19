@@ -10,10 +10,9 @@ import faker from "@faker-js/faker";
 
 export async function cleanDb() {
   await prisma.session.deleteMany({});
-  await prisma.users.deleteMany({});
   await prisma.exercise_muscle_groups.deleteMany({});
   await prisma.exercise.deleteMany({});
-  await prisma.muscle_groups.deleteMany({});
+  await prisma.users.deleteMany({});
 }
 
 export async function generateValidToken(user?: users) {
