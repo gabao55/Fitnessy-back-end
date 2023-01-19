@@ -62,8 +62,7 @@ model exercise_muscle_groups {
   exercise         exercise      @relation(fields: [exercise_id], references: [id])
   muscle_groups_id Int
   muscle_groups    muscle_groups @relation(fields: [muscle_groups_id], references: [id])
-  assignedAt       DateTime      @default(now())
-  assignedBy       String
+  createdAt       DateTime      @default(now())
 
   @@id([exercise_id, muscle_groups_id])
 }

@@ -7,11 +7,12 @@ import { loadEnv, connectDb, disconnectDB } from "@/config";
 
 loadEnv();
 
-import { authenticateToken, handleApplicationErrors } from "@/middlewares";
+import { handleApplicationErrors } from "@/middlewares";
 import {
   usersRouter,
   authenticationRouter,
 } from "@/routers";
+import { exercisesRouter } from "./routers/exercises-router";
 
 const app = express();
 app
@@ -20,7 +21,7 @@ app
   .get("/health", (_req, res) => res.send("OK!"))
   .use("/users", usersRouter)
   .use("/auth", authenticationRouter)
-  .use(authenticateToken)
+  .use("/exercises", exercisesRouter)
   .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {
