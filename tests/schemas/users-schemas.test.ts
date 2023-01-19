@@ -5,6 +5,7 @@ describe("createUserSchema", () => {
   const generateValidInput = () => ({
     email: faker.internet.email(),
     password: faker.internet.password(6),
+    name: faker.name.firstName()
   });
 
   describe("when email is not valid", () => {
