@@ -27,6 +27,9 @@ async function seedMuscleGroups() {
         name: "Back"
       },
       {
+        name: "Shoulder"
+      },
+      {
         name: "Biceps"
       },
       {
