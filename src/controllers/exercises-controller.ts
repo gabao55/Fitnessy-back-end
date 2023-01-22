@@ -23,7 +23,15 @@ export async function exercisesPost(req: AuthenticatedRequest, res: Response) {
 }
 
 export async function exercisesList(req: AuthenticatedRequest, res: Response) {
-	return res.send("OK");
+	const { userId } = req;
+
+	try {
+		const exercises = await exerciseService.listExercises(userId);
+
+		return res.status(httpStatus.OK).send(exercises)
+	} catch (error) {
+		return res.status(httpStatus.INTERNAL_SERVER_ERROR).send(error.message);
+	}
 }
 
 export async function exercisesPut(req: AuthenticatedRequest, res: Response) {

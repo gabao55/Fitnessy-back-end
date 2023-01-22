@@ -27,9 +27,29 @@ async function associateMuscleGroupToExercise(exercise_id: number, muscleGroup: 
   })
 }
 
+async function findMany(user_id: number) {
+  return prisma.exercise.findMany({
+    where: {
+      user_id
+    },
+    include: {
+      exercise_muscle_groups: {
+        select: {
+          muscle_groups: {
+            select: {
+              name: true
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
 const exercisesRepository = {
   createExercise,
-  associateMuscleGroupToExercise
+  associateMuscleGroupToExercise,
+  findMany,
 };
 
 export default exercisesRepository;
